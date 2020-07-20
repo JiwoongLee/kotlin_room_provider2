@@ -15,7 +15,7 @@ class LastModeManager : ContentProvider() {
         private const val AUTHORITY = "yandex.auto.projected"
         const val TASK_LASTMODE = "lastmode"
 
-        private lateinit var mContext: Context
+        private var mContext: Context? = null
 
         private const val MATCH_CODE_1 = 1
         private const val MATCH_CODE_2 = 2
@@ -32,12 +32,27 @@ class LastModeManager : ContentProvider() {
 
     fun initialize() {
         Log.d(TAG, "initialize")
-        mContext = context!!
-        lastModeDao = LastModeDatabase.getInstance(mContext)!!.lastModeDao()
     }
 
     override fun onCreate(): Boolean {
         Log.d(TAG, "onCreate creating a lastmode database")
+
+        mContext = context
+
+        if (null != mContext) {
+            val lastModeDatabase = LastModeDatabase.getInstance(mContext)
+            if (lastModeDatabase != null) {
+                lastModeDao = lastModeDatabase.lastModeDao()
+                Log.d(TAG, "lastModeDao initialize")
+            }
+            else {
+                Log.d(TAG, "lastmodedatabase is null")
+            }
+        }
+        else {
+            Log.d(TAG, "context is null")
+        }
+
         return true
     }
 
@@ -118,7 +133,9 @@ class LastModeManager : ContentProvider() {
             }
         }
         val itemDeleted: Int = lastModeDao.deleteAll()
-        mContext.contentResolver.notifyChange(uri, null)
+
+        mContext?.contentResolver?.notifyChange(uri, null)
+
         return itemDeleted
     }
 
@@ -137,7 +154,7 @@ class LastModeManager : ContentProvider() {
             }
         }
 
-        mContext.contentResolver.notifyChange(uri, null)
+        mContext?.contentResolver?.notifyChange(uri, null)
         return count
     }
 }

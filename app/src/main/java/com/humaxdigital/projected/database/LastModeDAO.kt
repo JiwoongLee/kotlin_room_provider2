@@ -1,15 +1,16 @@
 package com.humaxdigital.projected.database
 
 import android.database.Cursor
+import android.provider.BaseColumns
 import androidx.room.*
 
 @Dao
 interface LastModeDAO {
 
-    @Query("SELECT * FROM ${LastModeEntity.TABLE_NAME} ORDER BY _ID ASC")
+    @Query("SELECT * FROM ${LastModeEntity.TABLE_NAME} ORDER BY ${BaseColumns._ID} ASC")
     fun selectAll(): Cursor
 
-    @Query("SELECT * FROM ${LastModeEntity.TABLE_NAME} WHERE _ID = :id")
+    @Query("SELECT * FROM ${LastModeEntity.TABLE_NAME} WHERE ${BaseColumns._ID} = :id")
     fun selectById(id: Long): Cursor
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -18,7 +19,7 @@ interface LastModeDAO {
     @Query("DELETE FROM ${LastModeEntity.TABLE_NAME}")
     fun deleteAll(): Int
 
-    @Query("DELETE FROM ${LastModeEntity.TABLE_NAME} WHERE _ID = :id")
+    @Query("DELETE FROM ${LastModeEntity.TABLE_NAME} WHERE ${BaseColumns._ID} = :id")
     fun deleteById(id: Long): Int
 
     @Update

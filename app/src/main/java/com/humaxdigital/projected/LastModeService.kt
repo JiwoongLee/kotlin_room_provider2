@@ -11,7 +11,7 @@ class LastModeService : JobIntentService() {
 
     private val TAG = LastModeService::class.java.simpleName
     companion object {
-        private const val JOB_ID = 1001
+        private const val JOB_ID = 0x1001
 
         fun enqueueWork(content: Context, work: Intent) {
             enqueueWork(content, LastModeService::class.java, JOB_ID, work)
@@ -20,7 +20,7 @@ class LastModeService : JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
         Log.d(TAG, "onHandleWork")
-        LastModeManager().initialize()
+        //LastModeManager().initialize()
     }
 
     override fun onCreate() {
